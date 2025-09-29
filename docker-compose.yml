@@ -1,1 +1,40 @@
+version: '3.8'
 
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: plaivorb_mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: your_password
+      MARIADB_DATABASE: plaivorb_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d # Mount SQL scripts to initialize DB
+      - mariadb_data:/var/lib/mysql # Persist data
+    command: ["--max_allowed_packet=256M"] # Adjust as needed for large geometries/vectors
+
+  python_app:
+    build:
+      context: .
+      dockerfile: Dockerfile.app # A separate Dockerfile for the Python app
+    container_name: plaivorb_python_app
+    depends_on:
+      - mariadb
+    environment:
+      MARIADB_HOST: mariadb # Use service name as host
+      MARIADB_USER: root
+      MARIADB_PASSWORD: your_password
+      MARIADB_DATABASE: plaivorb_db
+    volumes:
+      - ./src:/app/src
+      - ./notebooks:/app/notebooks
+      - ./config.ini:/app/config.ini
+    # command: ["python3", "/app/src/ingest_data.py"] # Example command
+    # Or, if you want to run Jupyter:
+    # command: ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--no-browser"]
+    ports:
+      - "8888:8888"
+
+volumes:
+  mariadb_data:
