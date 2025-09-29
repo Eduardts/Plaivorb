@@ -1,1 +1,6 @@
-
+mariadb-connector-python
+pandas
+numpy
+shapely
+geopandas
+folium
