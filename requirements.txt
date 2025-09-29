@@ -4,3 +4,5 @@ numpy
 shapely
 geopandas
 folium
+scikit-learn # For embedding_model purposes
+joblib       # For saving/loading a machine learning model
