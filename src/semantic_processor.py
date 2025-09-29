@@ -5,6 +5,10 @@ from src.utils import get_db_connection, generate_synthetic_embedding
 from shapely.wkt import loads as wkt_loads
 import random
 import numpy as np
+from embedding_model import EmbeddingModel
+
+embedding_model = EmbeddingModel()
+
 
 def process_raw_data_into_geo_features(conn: mariadb.MariaDBConnection):
     """
@@ -13,6 +17,26 @@ def process_raw_data_into_geo_features(conn: mariadb.MariaDBConnection):
     """
     cursor = conn.cursor(dictionary=True) # Use dictionary cursor for easier access by column name
     print("\n--- Processing raw data into geo_features ---")
+
+
+    #     cursor = conn.cursor(dictionary=True) 
+    # print("\n--- Processing raw data into geo_features ---")
+    # cursor.execute("SELECT id, timestamp, latitude, longitude, sensor_reading, feature_type, ST_AsText(geometry) as geometry_wkt FROM raw_sensor_data WHERE processed_status = 'NEW';")
+    # new_raw_data = cursor.fetchall()
+    # for record in new_raw_data:
+    #     # Adding complexity: Instead of just generating random embeddings
+    #     # Use the real model to generate them (could integrate training as pseudo-code)
+    #     feature_type = record['feature_type']
+        
+    #     # Assuming sensor_reading is JSON structured data
+    #     # Convert sensor reading to Numpy array to create embeddings
+    #     # (This will require processing the JSON data properly, e.g., flattening it)
+    #     # Example (pretend sensor_data has more refined features for X):
+    #     sensor_data = json.loads(record['sensor_reading'])
+    #     embeddings_input = np.array([[sensor_data['temperature'], sensor_data['humidity'], sensor_data['pressure']]])
+    #     # Now generate embedding correctly
+    #     semantic_embedding = embedding_model.predict(embeddings_input)[0].tolist()
+        
 
     # Select unprocessed raw data
     cursor.execute("SELECT id, timestamp, latitude, longitude, sensor_reading, feature_type, ST_AsText(geometry) as geometry_wkt FROM raw_sensor_data WHERE processed_status = 'NEW'")
