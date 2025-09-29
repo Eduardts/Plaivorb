@@ -1,5 +1,5 @@
 # Plaivorb
-A project for mariadb hackathon
+A project for mariadb hackathon. It is a work in progress, unfinished, made for the idea phase.
 ### Integration Highlights (Leveraging Open-Source Tools)
 
 While Plaivorb's core is an innovative MariaDB-centric solution, it's designed for seamless integration with the broader Python and GIS ecosystem:
